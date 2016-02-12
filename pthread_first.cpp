@@ -32,8 +32,9 @@ void *helloW(void *args){
 
     cout << "I'm alive" <<endl;
     cout << "My 1 arg:" << c[0] << endl;
+    c[1] = (char *) "Thread changed the data";
     cout << "My 2 arg:" << c[1] << endl;
-    return 0;
+    pthread_exit(0);
 }
 
 /*
@@ -52,13 +53,18 @@ int main(int argc, char** argv) {
 
     FILE *f = fopen(fname, "w");
     fprintf(f, "%u", pid);
-    cout << pid << endl;
+    cout << "PID:" << pid << endl;
     fclose(f);
 
     pth = pthread_create(&thread, NULL, helloW, args);
-    pthread_join(thread, 0);
 
-    cout<<pth<<endl;
+    cout << "pth created:" << pth << endl;
+    cout << *(args+1) << endl;
+    
+    pthread_join(thread, 0);
+    
+    cout << "I, main, see changed data:" << endl;
+    cout << *(args+1) << endl;
 
     return 0;
 }
