@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-/* 
+/*
  * File:   pthread_first.cpp
  * Author: golo
  *
@@ -27,30 +27,39 @@ PID запущенного процесса должен быть сохране
 using namespace std;
 
 void *helloW(void *args){
+
+    char **c = (char **) args;
+
     cout << "I'm alive" <<endl;
+    cout << "My 1 arg:" << c[0] << endl;
+    cout << "My 2 arg:" << c[1] << endl;
     return 0;
 }
 
 /*
- * 
+ *
  */
 int main(int argc, char** argv) {
 
     pthread_t thread;
     int pth;
     pid_t pid = getpid();
-    char fname[] = "main.pid";   
+    char fname[] = "main.pid";
+    char **args;
+
+    args[0] = (char *) "Test thread";
+    args[1] = (char *) "Test thread2";
 
     FILE *f = fopen(fname, "w");
     fprintf(f, "%u", pid);
-    cout << pid << endl;        
+    cout << pid << endl;
     fclose(f);
-    
-    pth = pthread_create(&thread, NULL, helloW, NULL);
+
+    pth = pthread_create(&thread, NULL, helloW, args);
     pthread_join(thread, 0);
-    
+
     cout<<pth<<endl;
-    
+
     return 0;
 }
 
